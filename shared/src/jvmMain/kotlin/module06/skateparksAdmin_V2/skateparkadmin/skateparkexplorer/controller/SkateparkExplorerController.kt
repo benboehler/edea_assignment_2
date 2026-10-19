@@ -22,7 +22,8 @@ class SkateparkExplorerController(
         }
 
         when(action){
-
+            SkateparkExplorerAction.ReloadAllSkateparks ->
+                state = state.copy(allSkateparks = repository.readAllSkateparks())
             else -> {}
         }
     }
