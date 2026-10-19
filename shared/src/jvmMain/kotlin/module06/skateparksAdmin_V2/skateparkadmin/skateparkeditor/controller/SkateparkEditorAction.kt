@@ -10,4 +10,6 @@ sealed class SkateparkEditorAction(override val name:    String,
     class SetName(val nameText: String) : SkateparkEditorAction("Set name")
     class SetLatitude(val latitudeText: String) : SkateparkEditorAction("Set latitude")
     class SetLongitude(val longitudeText: String) : SkateparkEditorAction("Set longitude")
+    object Reload : SkateparkEditorAction("Reload")
+    object Back : SkateparkEditorAction("Back")
 }

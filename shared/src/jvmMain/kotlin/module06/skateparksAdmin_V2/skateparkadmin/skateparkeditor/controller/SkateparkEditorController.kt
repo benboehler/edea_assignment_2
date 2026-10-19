@@ -48,6 +48,11 @@ class SkateparkEditorController(id: Int,
             return
         }
         when(action){
+            SkateparkEditorAction.Back -> onFinished()
+            SkateparkEditorAction.Reload -> {
+                val skatepark = repository.readSkatepark(state.formModel.id.value)!!
+                state = state.copy(formModel = SkateparkFormModel(skatepark))
+            }
             is SkateparkEditorAction.SetName -> {
                 val name = state.formModel.name
                 val isValid = action.nameText.isNotBlank()

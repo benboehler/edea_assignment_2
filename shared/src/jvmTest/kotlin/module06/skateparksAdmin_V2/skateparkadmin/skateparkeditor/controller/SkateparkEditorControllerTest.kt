@@ -110,31 +110,46 @@ class SkateparkEditorControllerTest {
         }
     }
 
-    /*
     @Test
     fun testReload(){
         //given
+        val skatepark = skateparkRepo.create(defaultSkatepark)
+        val controller = SkateparkEditorController(skatepark.id, skateparkRepo)
+        controller.triggerAction(SkateparkEditorAction.SetName("Unsaved name"))
+        controller.triggerAction(SkateparkEditorAction.SetName(""))
+        controller.triggerAction(SkateparkEditorAction.SetLatitude("x"))
+
+        val updatedPark = skatepark.copy(name = "Name on database", latitude = 47.0)
+        skateparkRepo.updateSkatepark(updatedPark)
 
         //when
+        controller.triggerAction(SkateparkEditorAction.Reload)
 
         //then
-
-        fail("todo")
+        assertEquals(updatedPark, controller.state.formModel.asSkatepark())
+        assertTrue(controller.state.formModel.name.isValid)
+        assertTrue(controller.state.formModel.latitude.isValid)
+        assertEquals(updatedPark, skateparkRepo.readSkatepark(skatepark.id))
     }
 
     @Test
     fun testOnFinished(){
         //given
+        val skatepark = skateparkRepo.create(defaultSkatepark)
+        var onFinishedCounter = 0
+        val controller = SkateparkEditorController(skatepark.id, skateparkRepo,
+                                                   onFinished = { onFinishedCounter++ })
+        controller.triggerAction(SkateparkEditorAction.SetName("Unsaved name"))
 
         //when
+        controller.triggerAction(SkateparkEditorAction.Back)
 
         //then
-
-        fail("todo")
+        assertEquals(1, onFinishedCounter)
+        assertEquals(skatepark, skateparkRepo.readSkatepark(skatepark.id))
     }
 
 
-    */
     @Test
     fun testSetName(){
         //given
