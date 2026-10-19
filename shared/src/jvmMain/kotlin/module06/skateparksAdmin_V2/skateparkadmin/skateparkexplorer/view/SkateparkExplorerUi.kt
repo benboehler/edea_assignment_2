@@ -2,17 +2,28 @@ package module06.skateparksAdmin_V2.skateparkadmin.skateparkexplorer.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +41,7 @@ import module06.skateparksAdmin_V2.skateparkadmin.skateparkexplorer.controller.S
 import module06.xtracted.view.ActionIconStrip
 import module06.xtracted.view.AlignLeftRight
 import module06.xtracted.view.Toolbar
+import module06.xtracted.view.handCursor
 import module06.xtracted.view.theme.EdeaTheme
 
 @Composable
@@ -45,13 +57,19 @@ fun ApplicationScope.SkateparkExplorerWindow(state: SkateparkExplorerState, trig
 
 @Composable
 fun SkateparkExplorerUi(skateparks: List<Skatepark>, trigger: (SkateparkExplorerAction) -> Unit) {
-    EdeaTheme {
+    EdeaTheme(darkTheme = false) {
+        MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(
+            surfaceContainerHighest = Color(0xFFE6E6E6)
+        )) {
+        CompositionLocalProvider(LocalContentColor provides Color(0xFF222222)) {
 
         Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
             Toolbar {
                 AlignLeftRight {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        ActionIconStrip(trigger = trigger)
+                        ActionIconStrip(trigger,
+                                        listOf(SkateparkExplorerAction.CreateSkatepark,
+                                               SkateparkExplorerAction.ReloadAllSkateparks))
                         Headline("Skateparks Count: ${skateparks.size}")
                     }
                 }
@@ -72,6 +90,8 @@ fun SkateparkExplorerUi(skateparks: List<Skatepark>, trigger: (SkateparkExplorer
             }
         }
     }
+    }
+    }
 
 }
 
@@ -91,7 +111,42 @@ private fun NoSkateparks() {
 
 @Composable
 private fun SkateparkTable(skateparks: List<Skatepark>, trigger: (SkateparkExplorerAction) -> Unit) {
-    Text(text="Skatepark Table")
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth()
+                               .padding(end = 12.dp)
+                               .height(IntrinsicSize.Min)
+                               .background(Color(0xFFCCCCCC))) {
+            HeaderCell("Id", weight = 0.3f)
+            HeaderCell("Name")
+            HeaderCell("Street")
+            HeaderCell("Municipality")
+        }
+
+        Box(modifier = Modifier.weight(1.0f).fillMaxWidth()) {
+            val listState = rememberLazyListState()
+            LazyColumn(state = listState,
+                       modifier = Modifier.fillMaxSize().padding(end = 12.dp)) {
+                items(items = skateparks, key = { it.id }) { skatepark ->
+                    SkateparkRow(skatepark, trigger)
+                }
+            }
+            VerticalScrollbar(adapter = rememberScrollbarAdapter(listState),
+                              modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight())
+        }
+    }
+}
+
+@Composable
+private fun SkateparkRow(skatepark: Skatepark, trigger: (SkateparkExplorerAction) -> Unit) {
+    Row(modifier = Modifier.fillMaxWidth()
+                           .height(IntrinsicSize.Min)
+                           .handCursor()
+                           .clickable { trigger(SkateparkExplorerAction.SelectSkatepark(skatepark.id)) }) {
+        TableCell(weight = 0.3f) { Text(skatepark.id.toString()) }
+        TableCell(align = Alignment.CenterStart) { Text(skatepark.name) }
+        TableCell(align = Alignment.CenterStart) { Text(skatepark.street) }
+        TableCell(align = Alignment.CenterStart) { Text(skatepark.municipality) }
+    }
 }
 
 
