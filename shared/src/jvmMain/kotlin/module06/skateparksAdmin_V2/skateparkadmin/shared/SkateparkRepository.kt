@@ -64,7 +64,16 @@ class SkateparkRepository(val url: String) {
                table        = table,
                id           = skatepark.id,
                setStatement = """
-                                  |SET ${SkateparkColumn.NAME}          = ${skatepark.name.asSql()},
+                                  |SET ${SkateparkColumn.NAME}           = ${skatepark.name.asSql()},
+                                  |    ${SkateparkColumn.DESCRIPTION}    = ${skatepark.description.description.asSql()},
+                                  |    ${SkateparkColumn.STREET}         = ${skatepark.street.asSql()},
+                                  |    ${SkateparkColumn.MUNICIPALITY}   = ${skatepark.municipality.asSql()},
+                                  |    ${SkateparkColumn.MAPSURL}        = ${skatepark.mapsUrl.asSql()},
+                                  |    ${SkateparkColumn.LATITUDE}       = ${skatepark.latitude.asSql()},
+                                  |    ${SkateparkColumn.LONGITUDE}      = ${skatepark.longitude.asSql()},
+                                  |    ${SkateparkColumn.WEBSITE}        = ${skatepark.website.asSql()},
+                                  |    ${SkateparkColumn.FEATUEREDIMAGE} = ${skatepark.imageUrl.asSql()},
+                                  |    ${SkateparkColumn.PLACEID}        = ${skatepark.placeid.asSql()}
                                   |   """.trimMargin()
         )
 
