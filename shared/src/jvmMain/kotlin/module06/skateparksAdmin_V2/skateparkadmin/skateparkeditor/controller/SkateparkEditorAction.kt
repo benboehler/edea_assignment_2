@@ -12,4 +12,6 @@ sealed class SkateparkEditorAction(override val name:    String,
     class SetLongitude(val longitudeText: String) : SkateparkEditorAction("Set longitude")
     object Reload : SkateparkEditorAction("Reload")
     object Back : SkateparkEditorAction("Back")
+    object Update : SkateparkEditorAction("Save")
+    object Delete : SkateparkEditorAction("Delete")
 }

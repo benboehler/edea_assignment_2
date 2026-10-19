@@ -1,6 +1,8 @@
 package module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller
 
 import java.net.URI
+import java.nio.file.Files
+import java.nio.file.Path
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
+import module06.skateparksAdmin_V2.defectsadmin.shared.DefectRepository
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
 import module06.xtracted.controller.Controller
 import module06.xtracted.repository.urlFromResources
@@ -25,7 +28,13 @@ class SkateparkEditorController(id: Int,
                                 val onDefectSelected: (Int) -> Unit = {} ) : Controller<SkateparkEditorAction> {
 
 
-    val url = "/data/defectDB".urlFromResources()
+    private val defectDatabasePath = Path.of(System.getProperty("user.home"), ".edea", "database", "defectDB")
+    val url = if (Files.exists(defectDatabasePath)) {
+        "jdbc:sqlite:${defectDatabasePath.toAbsolutePath()}"
+    } else {
+        "/data/defectDB".urlFromResources()
+    }
+    private val defectRepository = DefectRepository(url)
     val defaultImageBitmap = getImageBitmapFromResources("module06/skatepark-default.jpg")
 
     val controllerScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -48,6 +57,18 @@ class SkateparkEditorController(id: Int,
             return
         }
         when(action){
+            SkateparkEditorAction.Delete -> {
+                val parkId = state.formModel.id.value
+                defectRepository.readAllDefects(parkId).forEach { defect ->
+                    defectRepository.deleteDefect(defect.id)
+                }
+                repository.deleteSkatepark(parkId)
+                onFinished()
+            }
+            SkateparkEditorAction.Update -> {
+                repository.updateSkatepark(state.formModel.asSkatepark())
+                onFinished()
+            }
             SkateparkEditorAction.Back -> onFinished()
             SkateparkEditorAction.Reload -> {
                 val skatepark = repository.readSkatepark(state.formModel.id.value)!!

@@ -1,6 +1,7 @@
 package module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller
 
 import module06.skateparksAdmin_V2.defectsadmin.shared.DefectRepository
+import module06.skateparksAdmin_V2.defectsadmin.shared.Defect
 import module06.skateparksAdmin_V2.skateparkadmin.shared.Skatepark
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkState
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SkateparkEditorControllerTest {
@@ -237,7 +239,6 @@ class SkateparkEditorControllerTest {
         }
     }
 
-    /*
     @Test
     fun testUpdate(){
         //given
@@ -288,5 +289,4 @@ class SkateparkEditorControllerTest {
 
     }
 
-    */
 }
