@@ -1,10 +1,16 @@
 package module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller
 
+import module06.skateparksAdmin_V2.defectsadmin.shared.DefectRepository
+import module06.skateparksAdmin_V2.skateparkadmin.shared.Skatepark
+import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
+import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkState
+import module06.xtracted.repository.urlFromResources
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 class SkateparkEditorControllerTest {
-
-    //todo : Kommentar entfernen
-
-    /*
 
     private lateinit var skateparkRepo    : SkateparkRepository
     private lateinit var defectsRepo      : DefectRepository
@@ -49,6 +55,7 @@ class SkateparkEditorControllerTest {
     }
 
 
+    /*
     @Test
     fun testSetLongitude(){
         //given
