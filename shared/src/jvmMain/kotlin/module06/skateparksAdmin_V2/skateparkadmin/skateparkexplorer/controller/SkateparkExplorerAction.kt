@@ -8,5 +8,7 @@ sealed class SkateparkExplorerAction(
         override val icon: ImageVector? = null,
         override val enabled: Boolean = true) : Action {
 
-   //to be implemented
+    object ReloadAllSkateparks : SkateparkExplorerAction("Reload")
+    object CreateSkatepark : SkateparkExplorerAction("Create")
+    class SelectSkatepark(val skateparkId: Int) : SkateparkExplorerAction("Select skatepark")
 }
