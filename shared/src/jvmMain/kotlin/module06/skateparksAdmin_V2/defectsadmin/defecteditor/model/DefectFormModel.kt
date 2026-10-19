@@ -17,7 +17,7 @@ class DefectFormModel(defect: Defect){
     var resolveDate  by mutableStateOf(value = Attribute(
         caption = "Resolve Date",
         value = defect.resolveDate ?: defect.issueDate, // avoid null for the value as Attribute has a non-null value!
-        valueAsText = defect.resolveDate?.format(defectDateFormatter) ?: defect.issueDate.format(defectDateFormatter),
+        valueAsText = defect.resolveDate?.format(defectDateFormatter) ?: "",
         isValid = true)
     )
     var parkId       by mutableStateOf(Attribute("Park Id",   defect.parkId,  defect.parkId.toString(), true))
@@ -28,7 +28,7 @@ class DefectFormModel(defect: Defect){
                description.value,
                status.value,
                issueDate.value,
-               resolveDate.value,
+               if (resolveDate.valueAsText.isBlank()) null else resolveDate.value,
                parkId.value)
 
 }
