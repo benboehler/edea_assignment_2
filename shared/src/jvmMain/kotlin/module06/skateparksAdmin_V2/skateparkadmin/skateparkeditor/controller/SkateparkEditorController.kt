@@ -67,6 +67,9 @@ class SkateparkEditorController(id: Int,
                 onFinished()
             }
             SkateparkEditorAction.Update -> {
+                if (!state.formModel.isValid) {
+                    return
+                }
                 repository.updateSkatepark(state.formModel.asSkatepark())
                 onFinished()
             }

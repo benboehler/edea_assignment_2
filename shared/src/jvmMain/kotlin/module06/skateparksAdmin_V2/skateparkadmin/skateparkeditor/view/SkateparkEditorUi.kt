@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +25,8 @@ import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.Ska
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorState
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
 import module06.xtracted.view.AlignLeftRight
+import module06.xtracted.view.ActionIcon
+import module06.xtracted.view.ActionIconStrip
 import module06.xtracted.view.FormField
 import module06.xtracted.view.ReadOnlyFormField
 import module06.xtracted.view.Toolbar
@@ -61,6 +64,7 @@ fun SkateparkEditorUi(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap, t
                                       modifier = Modifier.fillMaxHeight()
                                           .align(Alignment.CenterEnd))
                 }
+                SaveBar(skatepark, trigger)
             }
         }
     }
@@ -70,7 +74,20 @@ fun SkateparkEditorUi(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap, t
 private fun Bar(trigger: (SkateparkEditorAction) -> Unit) {
     Toolbar {
         AlignLeftRight {
-            Text(text = "Skatepark Editor Action Icons")
+            ActionIconStrip(trigger,
+                            listOf(SkateparkEditorAction.Back, SkateparkEditorAction.Reload))
+            ActionIcon(trigger = trigger, action = SkateparkEditorAction.Delete)
+        }
+    }
+}
+
+@Composable
+private fun SaveBar(skatepark: SkateparkFormModel, trigger: (SkateparkEditorAction) -> Unit) {
+    Row(horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()) {
+        Button(enabled = skatepark.isValid,
+               onClick = { trigger(SkateparkEditorAction.Update) }) {
+            Text(SkateparkEditorAction.Update.name)
         }
     }
 }

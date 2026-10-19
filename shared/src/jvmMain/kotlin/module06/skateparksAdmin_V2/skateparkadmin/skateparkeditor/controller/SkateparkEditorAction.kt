@@ -1,6 +1,10 @@
 package module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.RemoveCircle
+import androidx.compose.material.icons.filled.Sync
 import module06.xtracted.controller.Action
 
 sealed class SkateparkEditorAction(override val name:    String,
@@ -15,8 +19,8 @@ sealed class SkateparkEditorAction(override val name:    String,
     class SetImageUrl(val imageUrlText: String) : SkateparkEditorAction("Set image URL")
     class SetLatitude(val latitudeText: String) : SkateparkEditorAction("Set latitude")
     class SetLongitude(val longitudeText: String) : SkateparkEditorAction("Set longitude")
-    object Reload : SkateparkEditorAction("Reload")
-    object Back : SkateparkEditorAction("Back")
+    object Reload : SkateparkEditorAction("Reload", Icons.Filled.Sync)
+    object Back : SkateparkEditorAction("Back", Icons.AutoMirrored.Filled.ArrowBack)
     object Update : SkateparkEditorAction("Save")
-    object Delete : SkateparkEditorAction("Delete")
+    object Delete : SkateparkEditorAction("Delete", Icons.Filled.RemoveCircle)
 }

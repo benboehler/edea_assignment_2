@@ -20,6 +20,10 @@ class SkateparkFormModel(skatepark: Skatepark){
     var imageUrl     by mutableStateOf(value = Attribute(caption ="ImageUrl",     value = skatepark.imageUrl,        valueAsText = skatepark.imageUrl))
     var placeid      by mutableStateOf(value = Attribute(caption ="Placeid",      value = skatepark.placeid,         valueAsText = skatepark.placeid))
 
+    val isValid: Boolean
+        get() = listOf(id, name, description, street, municipality, mapsUrl,
+                       latitude, longitude, website, imageUrl, placeid).all { it.isValid }
+
     fun asSkatepark(): Skatepark =
         Skatepark(id.value,
                   name.value,
