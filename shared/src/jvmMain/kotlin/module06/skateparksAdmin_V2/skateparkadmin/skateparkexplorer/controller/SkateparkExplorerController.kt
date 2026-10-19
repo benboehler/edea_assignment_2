@@ -24,7 +24,8 @@ class SkateparkExplorerController(
         when(action){
             SkateparkExplorerAction.ReloadAllSkateparks ->
                 state = state.copy(allSkateparks = repository.readAllSkateparks())
-            else -> {}
+            SkateparkExplorerAction.CreateSkatepark -> onCreate()
+            is SkateparkExplorerAction.SelectSkatepark -> onSkateparkSelected(action.skateparkId)
         }
     }
 
