@@ -24,6 +24,8 @@ import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.Ska
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorState
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
 import module06.xtracted.view.AlignLeftRight
+import module06.xtracted.view.FormField
+import module06.xtracted.view.ReadOnlyFormField
 import module06.xtracted.view.Toolbar
 import module06.xtracted.view.theme.EdeaTheme
 
@@ -40,12 +42,12 @@ fun ApplicationScope.SkateparkEditorWindow(state: SkateparkEditorState, trigger:
 
 @Composable
 fun SkateparkEditorUi(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap, trigger: (SkateparkEditorAction) -> Unit ) {
-    EdeaTheme {
+    EdeaTheme(darkTheme = false) {
         Column(modifier = Modifier.background(Color.White)
                                   .fillMaxSize()) {
             Bar(trigger)
 
-            Column(verticalArrangement = Arrangement.spacedBy(5.dp),
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp),
                    modifier            = Modifier.padding(20.dp)) {
                 Header(skatepark, imageBitmap)
                 Box(modifier = Modifier.weight(1.0f)) {
@@ -91,14 +93,36 @@ private fun StatusSelection(skatepark: SkateparkFormModel, onValueChange: (Strin
 
 @Composable
 private fun Form(skatepark: SkateparkFormModel, trigger: (SkateparkEditorAction) -> Unit){
-    Text("Form")
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp),
+           modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
+        FormField(attribute = skatepark.name,
+                  onValueChange = { trigger(SkateparkEditorAction.SetName(it)) })
+        Text(skatepark.description.caption)
+        StatusSelection(skatepark,
+                        onValueChange = { trigger(SkateparkEditorAction.SetDescription(it)) })
+        FormField(attribute = skatepark.street,
+                  onValueChange = { trigger(SkateparkEditorAction.SetStreet(it)) })
+        FormField(attribute = skatepark.municipality,
+                  onValueChange = { trigger(SkateparkEditorAction.SetMunicipality(it)) })
+        FormField(attribute = skatepark.website,
+                  onValueChange = { trigger(SkateparkEditorAction.SetWebsite(it)) })
+        FormField(attribute = skatepark.imageUrl,
+                  onValueChange = { trigger(SkateparkEditorAction.SetImageUrl(it)) })
+    }
 }
 
 
 
 @Composable
 private fun Header(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap) {
-    Text("Header")
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp),
+           modifier = Modifier.fillMaxWidth()
+                              .background(Color(0xFFF2F2F2))
+                              .padding(12.dp)) {
+        ReadOnlyFormField(skatepark.name)
+        ReadOnlyFormField(skatepark.street)
+        ReadOnlyFormField(skatepark.municipality)
+    }
 }
 
 val CH: Locale = Locale.of("de", "CH")

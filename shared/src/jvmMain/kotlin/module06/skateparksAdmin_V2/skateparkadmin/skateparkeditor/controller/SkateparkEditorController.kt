@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
+import module06.skateparksAdmin_V2.skateparkadmin.shared.asSkateparkState
 import module06.skateparksAdmin_V2.defectsadmin.shared.DefectRepository
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
 import module06.xtracted.controller.Controller
@@ -81,6 +82,37 @@ class SkateparkEditorController(id: Int,
                     value = if (isValid) action.nameText else name.value,
                     valueAsText = action.nameText,
                     isValid = isValid
+                )
+            }
+            is SkateparkEditorAction.SetDescription -> {
+                val status = action.descriptionText.asSkateparkState()
+                state.formModel.description = state.formModel.description.copy(
+                    value = status,
+                    valueAsText = status.description
+                )
+            }
+            is SkateparkEditorAction.SetStreet -> {
+                state.formModel.street = state.formModel.street.copy(
+                    value = action.streetText,
+                    valueAsText = action.streetText
+                )
+            }
+            is SkateparkEditorAction.SetMunicipality -> {
+                state.formModel.municipality = state.formModel.municipality.copy(
+                    value = action.municipalityText,
+                    valueAsText = action.municipalityText
+                )
+            }
+            is SkateparkEditorAction.SetWebsite -> {
+                state.formModel.website = state.formModel.website.copy(
+                    value = action.websiteText,
+                    valueAsText = action.websiteText
+                )
+            }
+            is SkateparkEditorAction.SetImageUrl -> {
+                state.formModel.imageUrl = state.formModel.imageUrl.copy(
+                    value = action.imageUrlText,
+                    valueAsText = action.imageUrlText
                 )
             }
             is SkateparkEditorAction.SetLongitude -> {
