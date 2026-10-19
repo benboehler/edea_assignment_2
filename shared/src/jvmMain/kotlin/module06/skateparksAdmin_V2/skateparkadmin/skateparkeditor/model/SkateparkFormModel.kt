@@ -9,7 +9,6 @@ import module06.xtracted.data.Attribute
 class SkateparkFormModel(skatepark: Skatepark){
     var description  by mutableStateOf(value = Attribute(caption ="Status",       value = skatepark.description,     valueAsText = skatepark.description.description))
 
-   /*
     var id           by mutableStateOf(value = Attribute(caption ="Id",           value = skatepark.id,              valueAsText = skatepark.id.toString()))
     var name         by mutableStateOf(value = Attribute(caption ="Name",         value = skatepark.name,            valueAsText = skatepark.name))
     var street       by mutableStateOf(value = Attribute(caption ="Street",       value = skatepark.street,          valueAsText = skatepark.street))
@@ -20,13 +19,8 @@ class SkateparkFormModel(skatepark: Skatepark){
     var website      by mutableStateOf(value = Attribute(caption ="Website",      value = skatepark.website,         valueAsText = skatepark.website))
     var imageUrl     by mutableStateOf(value = Attribute(caption ="ImageUrl",     value = skatepark.imageUrl,        valueAsText = skatepark.imageUrl))
     var placeid      by mutableStateOf(value = Attribute(caption ="Placeid",      value = skatepark.placeid,         valueAsText = skatepark.placeid))
-    */
 
-    fun asSkatepark(): Skatepark {
-        return Skatepark()
-    }
-
-    /*=
+    fun asSkatepark(): Skatepark =
         Skatepark(id.value,
                   name.value,
                   description.value,
@@ -38,6 +32,4 @@ class SkateparkFormModel(skatepark: Skatepark){
                   website.value,
                   imageUrl.value,
                   placeid.value)
-
-     */
 }
