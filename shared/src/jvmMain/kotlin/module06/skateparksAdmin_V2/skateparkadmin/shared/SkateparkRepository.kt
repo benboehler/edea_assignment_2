@@ -31,8 +31,12 @@ class SkateparkRepository(val url: String) {
 
     fun create(initial: Skatepark): Skatepark {
         val insertStmt = """INSERT INTO $table 
-                            |            (${SkateparkColumn.NAME}, ) 
-                            |    VALUES  (${initial.name.asSql()})
+                            |            (${SkateparkColumn.NAME}, ${SkateparkColumn.DESCRIPTION}, ${SkateparkColumn.STREET},
+                            |             ${SkateparkColumn.MUNICIPALITY}, ${SkateparkColumn.MAPSURL}, ${SkateparkColumn.LATITUDE},
+                            |             ${SkateparkColumn.LONGITUDE}, ${SkateparkColumn.WEBSITE}, ${SkateparkColumn.FEATUEREDIMAGE}, ${SkateparkColumn.PLACEID})
+                            |    VALUES  (${initial.name.asSql()}, ${initial.description.description.asSql()}, ${initial.street.asSql()},
+                            |             ${initial.municipality.asSql()}, ${initial.mapsUrl.asSql()}, ${initial.latitude.asSql()},
+                            |             ${initial.longitude.asSql()}, ${initial.website.asSql()}, ${initial.imageUrl.asSql()}, ${initial.placeid.asSql()})
                             |    RETURNING ${SkateparkColumn.ID}
                             |    """.trimMargin()
 
@@ -79,7 +83,17 @@ class SkateparkRepository(val url: String) {
              table = table)
 
     private fun ResultSet.asSkatepark() =
-        Skatepark()
+        Skatepark(id           = getInt(SkateparkColumn.ID.name),
+                  name         = getString(SkateparkColumn.NAME.name) ?: "",
+                  description  = getString(SkateparkColumn.DESCRIPTION.name).asSkateparkState(),
+                  street       = getString(SkateparkColumn.STREET.name) ?: "",
+                  municipality = getString(SkateparkColumn.MUNICIPALITY.name) ?: "",
+                  mapsUrl      = getString(SkateparkColumn.MAPSURL.name) ?: "",
+                  latitude     = getString(SkateparkColumn.LATITUDE.name)?.toDoubleOrNull(),
+                  longitude    = getString(SkateparkColumn.LONGITUDE.name)?.toDoubleOrNull(),
+                  website      = getString(SkateparkColumn.WEBSITE.name) ?: "",
+                  imageUrl     = getString(SkateparkColumn.FEATUEREDIMAGE.name) ?: "",
+                  placeid      = getString(SkateparkColumn.PLACEID.name) ?: "")
 
 
 }
