@@ -8,6 +8,7 @@ import module06.xtracted.repository.urlFromResources
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class SkateparkEditorControllerTest {
@@ -55,17 +56,61 @@ class SkateparkEditorControllerTest {
     }
 
 
-    /*
     @Test
     fun testSetLongitude(){
         //given
+        val skatepark = skateparkRepo.create(defaultSkatepark)
+        val controller = SkateparkEditorController(skatepark.id, skateparkRepo)
+        val newLongitude = "-123.45"
 
         //when
+        controller.triggerAction(SkateparkEditorAction.SetLongitude(newLongitude))
 
         //then
-        fail("todo")
+        with(controller.state.formModel.longitude){
+            assertEquals(newLongitude.toDouble(), value)
+            assertEquals(newLongitude, valueAsText)
+            assertTrue(isValid)
+        }
+
+        listOf("-181.0", "181.0").forEach { invalidLongitude ->
+            controller.triggerAction(SkateparkEditorAction.SetLongitude(invalidLongitude))
+
+            with(controller.state.formModel.longitude){
+                assertEquals(newLongitude.toDouble(), value)
+                assertEquals(invalidLongitude, valueAsText)
+                assertFalse(isValid)
+            }
+        }
+
+        listOf("-180.0", "180.0", "0.0").forEach { validLongitude ->
+            controller.triggerAction(SkateparkEditorAction.SetLongitude(validLongitude))
+
+            with(controller.state.formModel.longitude){
+                assertEquals(validLongitude.toDouble(), value)
+                assertEquals(validLongitude, valueAsText)
+                assertTrue(isValid)
+            }
+        }
+
+        controller.triggerAction(SkateparkEditorAction.SetLongitude(""))
+
+        with(controller.state.formModel.longitude){
+            assertEquals(0.0, value)
+            assertEquals("", valueAsText)
+            assertTrue(isValid)
+        }
+
+        controller.triggerAction(SkateparkEditorAction.SetLongitude("x"))
+
+        with(controller.state.formModel.longitude){
+            assertEquals(0.0, value)
+            assertEquals("x", valueAsText)
+            assertFalse(isValid)
+        }
     }
 
+    /*
     @Test
     fun testReload(){
         //given
@@ -89,6 +134,7 @@ class SkateparkEditorControllerTest {
     }
 
 
+    */
     @Test
     fun testSetName(){
         //given
@@ -176,6 +222,7 @@ class SkateparkEditorControllerTest {
         }
     }
 
+    /*
     @Test
     fun testUpdate(){
         //given

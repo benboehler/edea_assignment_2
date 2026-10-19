@@ -7,5 +7,7 @@ sealed class SkateparkEditorAction(override val name:    String,
                                    override val icon:    ImageVector? = null,
                                    override val enabled: Boolean      = true) : Action {
 
-  //to be implemented
+    class SetName(val nameText: String) : SkateparkEditorAction("Set name")
+    class SetLatitude(val latitudeText: String) : SkateparkEditorAction("Set latitude")
+    class SetLongitude(val longitudeText: String) : SkateparkEditorAction("Set longitude")
 }

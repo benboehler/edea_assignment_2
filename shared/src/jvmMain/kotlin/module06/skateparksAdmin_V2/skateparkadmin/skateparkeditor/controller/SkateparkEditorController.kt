@@ -48,8 +48,35 @@ class SkateparkEditorController(id: Int,
             return
         }
         when(action){
-
-            else -> {}
+            is SkateparkEditorAction.SetName -> {
+                val name = state.formModel.name
+                val isValid = action.nameText.isNotBlank()
+                state.formModel.name = name.copy(
+                    value = if (isValid) action.nameText else name.value,
+                    valueAsText = action.nameText,
+                    isValid = isValid
+                )
+            }
+            is SkateparkEditorAction.SetLongitude -> {
+                val longitude = state.formModel.longitude
+                val parsedLongitude = if (action.longitudeText.isBlank()) 0.0 else action.longitudeText.toDoubleOrNull()
+                val isValid = parsedLongitude != null && parsedLongitude in -180.0..180.0
+                state.formModel.longitude = longitude.copy(
+                    value = if (parsedLongitude != null && isValid) parsedLongitude else longitude.value,
+                    valueAsText = action.longitudeText,
+                    isValid = isValid
+                )
+            }
+            is SkateparkEditorAction.SetLatitude -> {
+                val latitude = state.formModel.latitude
+                val parsedLatitude = if (action.latitudeText.isBlank()) 0.0 else action.latitudeText.toDoubleOrNull()
+                val isValid = parsedLatitude != null && parsedLatitude in -90.0..90.0
+                state.formModel.latitude = latitude.copy(
+                    value = if (parsedLatitude != null && isValid) parsedLatitude else latitude.value,
+                    valueAsText = action.latitudeText,
+                    isValid = isValid
+                )
+            }
         }
     }
 
