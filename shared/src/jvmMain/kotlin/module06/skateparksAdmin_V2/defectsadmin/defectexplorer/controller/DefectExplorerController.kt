@@ -23,7 +23,10 @@ class DefectExplorerController(
 
         when(action){
 
-            else -> {}
+            DefectExplorerAction.ReloadAllDefects ->
+                state = state.copy(allDefects = repository.readAllDefects(parkId))
+            DefectExplorerAction.CreateDefect -> onCreate()
+            is DefectExplorerAction.SelectDefect -> onDefectSelected(action.defectId)
         }
     }
 
