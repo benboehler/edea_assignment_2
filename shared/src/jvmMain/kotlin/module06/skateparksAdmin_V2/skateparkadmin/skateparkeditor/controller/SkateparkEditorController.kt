@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -53,7 +54,7 @@ class SkateparkEditorController(id: Int,
 
 
     init {
-      //  loadImageBitmap(state.formModel.imageUrl.value)
+        loadImageBitmap(state.formModel.imageUrl.value)
     }
 
     override fun triggerAction(action: SkateparkEditorAction) {
@@ -81,6 +82,7 @@ class SkateparkEditorController(id: Int,
                 val skatepark = repository.readSkatepark(state.formModel.id.value)!!
                 state.defectExplorerController.triggerAction(DefectExplorerAction.ReloadAllDefects)
                 state = state.copy(formModel = SkateparkFormModel(skatepark))
+                loadImageBitmap(skatepark.imageUrl)
             }
             is SkateparkEditorAction.SetName -> {
                 val name = state.formModel.name
@@ -121,6 +123,7 @@ class SkateparkEditorController(id: Int,
                     value = action.imageUrlText,
                     valueAsText = action.imageUrlText
                 )
+                loadImageBitmap(action.imageUrlText)
             }
             is SkateparkEditorAction.SetLongitude -> {
                 val longitude = state.formModel.longitude
@@ -154,8 +157,17 @@ class SkateparkEditorController(id: Int,
                                  onDefectSelected = { onDefectSelected(it) })
 
     fun loadImageBitmap(url: String) {
+        state = state.copy(imageBitmap = defaultImageBitmap)
+        if (url.isBlank()) {
+            return
+        }
         controllerScope.launch {
-            state = state.copy(imageBitmap = getImageBitmapFromUrl(url))
+            val bitmap = getImageBitmapFromUrl(url)
+            withContext(Dispatchers.Main) {
+                if (state.formModel.imageUrl.value == url) {
+                    state = state.copy(imageBitmap = bitmap)
+                }
+            }
         }
     }
 
@@ -170,7 +182,9 @@ class SkateparkEditorController(id: Int,
 
     private fun getImageBitmapFromUrl(url: String): ImageBitmap {
         return try {
-            URI(url).toURL().openStream().readAllBytes().decodeToImageBitmap()
+            URI(url).toURL().openStream().use {
+                it.readAllBytes().decodeToImageBitmap()
+            }
         } catch (e: Exception) {
             defaultImageBitmap
         }

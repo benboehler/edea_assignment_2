@@ -2,20 +2,27 @@ package module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.view
 
 import java.util.*
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
@@ -31,7 +38,6 @@ import module06.xtracted.view.AlignLeftRight
 import module06.xtracted.view.ActionIcon
 import module06.xtracted.view.ActionIconStrip
 import module06.xtracted.view.FormField
-import module06.xtracted.view.ReadOnlyFormField
 import module06.xtracted.view.Toolbar
 import module06.xtracted.view.theme.EdeaTheme
 
@@ -151,13 +157,27 @@ private fun Form(skatepark: SkateparkFormModel, trigger: (SkateparkEditorAction)
 
 @Composable
 private fun Header(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp),
-           modifier = Modifier.fillMaxWidth()
-                              .background(Color(0xFFF2F2F2))
-                              .padding(12.dp)) {
-        ReadOnlyFormField(skatepark.name)
-        ReadOnlyFormField(skatepark.street)
-        ReadOnlyFormField(skatepark.municipality)
+    Box(modifier = Modifier.fillMaxWidth()
+                           .height(240.dp)
+                           .clip(RoundedCornerShape(12.dp))) {
+        Image(bitmap = imageBitmap,
+              contentDescription = "Photo of ${skatepark.name.value}",
+              contentScale = ContentScale.Crop,
+              modifier = Modifier.fillMaxSize())
+        Box(modifier = Modifier.matchParentSize().background(
+            Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.75f)))
+        ))
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp),
+               modifier = Modifier.align(Alignment.BottomStart).padding(20.dp)) {
+            Text(text = skatepark.name.value,
+                 color = Color.White,
+                 fontWeight = FontWeight.Light,
+                 fontSize = 32.sp)
+            Text(text = listOf(skatepark.street.value, skatepark.municipality.value)
+                            .filter { it.isNotBlank() }.joinToString(", "),
+                 color = Color.White,
+                 fontSize = 20.sp)
+        }
     }
 }
 
