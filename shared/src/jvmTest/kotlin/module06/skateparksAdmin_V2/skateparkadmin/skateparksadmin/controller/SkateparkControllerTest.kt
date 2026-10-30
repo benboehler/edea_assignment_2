@@ -1,7 +1,19 @@
 package module06.skateparksAdmin_V2.skateparkadmin.skateparksadmin.controller
 
+import module06.skateparksAdmin_V2.skateparkadmin.shared.Skatepark
+import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
+import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkState
+import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorAction
+import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorController
+import module06.skateparksAdmin_V2.skateparkadmin.skateparkexplorer.controller.SkateparkExplorerAction
+import module06.skateparksAdmin_V2.skateparkadmin.skateparkexplorer.controller.SkateparkExplorerController
+import module06.xtracted.repository.urlFromResources
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
 class SkateparkControllerTest {
-    /*
     private lateinit var skateparkRepo : SkateparkRepository
     private lateinit var defaultSkatepark : Skatepark
 
@@ -112,7 +124,6 @@ class SkateparkControllerTest {
 
     }
 
-     */
 
 
 }
