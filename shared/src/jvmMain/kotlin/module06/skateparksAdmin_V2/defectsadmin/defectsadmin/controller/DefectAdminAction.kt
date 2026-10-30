@@ -9,4 +9,5 @@ sealed class DefectAdminAction (override val name: String,
 
     object SwitchToExplorer : DefectAdminAction("Switch to Explorer")
     class SwitchToEditor(val defectId: Int) : DefectAdminAction("Switch to Editor")
+    class CreateDefectForPark(val parkId: Int) : DefectAdminAction("Create defect for park")
 }

@@ -18,6 +18,7 @@ class DefectController(val repository: DefectRepository, val onSkateparkSelected
         when(action){
             DefectAdminAction.SwitchToExplorer -> switchToOverview()
             is DefectAdminAction.SwitchToEditor -> switchToDefect(action.defectId)
+            is DefectAdminAction.CreateDefectForPark -> switchToNewDefect(action.parkId)
         }
     }
 
@@ -27,8 +28,8 @@ class DefectController(val repository: DefectRepository, val onSkateparkSelected
         state = state.copy(activeController = createEditorController(defectId))
     }
 
-    private fun switchToNewDefect() {
-        val newDefect = repository.create(Defect(id = -1))
+    private fun switchToNewDefect(parkId: Int = -1) {
+        val newDefect = repository.create(Defect(id = -1, parkId = parkId))
         switchToDefect(newDefect.id)
     }
 

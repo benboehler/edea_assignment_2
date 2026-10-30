@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkRepository
 import module06.skateparksAdmin_V2.skateparkadmin.shared.asSkateparkState
 import module06.skateparksAdmin_V2.defectsadmin.shared.DefectRepository
+import module06.skateparksAdmin_V2.defectsadmin.defectexplorer.controller.DefectExplorerController
+import module06.skateparksAdmin_V2.defectsadmin.defectexplorer.controller.DefectExplorerAction
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
 import module06.xtracted.controller.Controller
 import module06.xtracted.repository.urlFromResources
@@ -45,7 +47,8 @@ class SkateparkEditorController(id: Int,
 
     var state by mutableStateOf(SkateparkEditorState(title        = "Skatepark Editor Demo",
                                                      formModel    = SkateparkFormModel(repository.readSkatepark(id)!!),
-                                                      imageBitmap  = defaultImageBitmap))
+                                                      imageBitmap  = defaultImageBitmap,
+                                                      defectExplorerController = createDefectExplorerController(id)))
 
 
 
@@ -76,6 +79,7 @@ class SkateparkEditorController(id: Int,
             SkateparkEditorAction.Back -> onFinished()
             SkateparkEditorAction.Reload -> {
                 val skatepark = repository.readSkatepark(state.formModel.id.value)!!
+                state.defectExplorerController.triggerAction(DefectExplorerAction.ReloadAllDefects)
                 state = state.copy(formModel = SkateparkFormModel(skatepark))
             }
             is SkateparkEditorAction.SetName -> {
@@ -142,6 +146,12 @@ class SkateparkEditorController(id: Int,
     }
 
 
+
+    private fun createDefectExplorerController(parkId: Int) =
+        DefectExplorerController(parkId = parkId,
+                                 repository = defectRepository,
+                                 onCreate = { onNewDefect(parkId) },
+                                 onDefectSelected = { onDefectSelected(it) })
 
     fun loadImageBitmap(url: String) {
         controllerScope.launch {

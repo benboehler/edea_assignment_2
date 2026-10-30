@@ -9,4 +9,7 @@ sealed class FedAdminActions(override val name: String,
 
     object SwitchToSkateparks : FedAdminActions("Skateparks")
     object SwitchToDefects : FedAdminActions("Defects")
+    class OpenDefect(val defectId: Int) : FedAdminActions("Open defect")
+    class NewDefect(val parkId: Int) : FedAdminActions("New defect")
+    class OpenSkatepark(val parkId: Int) : FedAdminActions("Open skatepark")
 }
