@@ -17,6 +17,7 @@ fun main() {
         id            = initialId,
         repository    = repository,
         onFinished    = { println("finished editing")},
+        onSkateparkSelected = { println("saved; return to skatepark $it") },
     )
 
     application {
