@@ -21,6 +21,9 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import module06.skateparksAdmin_V2.skateparkadmin.shared.SkateparkState
+import module06.skateparksAdmin_V2.defectsadmin.shared.Defect
+import module06.skateparksAdmin_V2.defectsadmin.defectexplorer.controller.DefectExplorerAction
+import module06.skateparksAdmin_V2.defectsadmin.defectexplorer.view.DefectExplorerUi
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorAction
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.controller.SkateparkEditorState
 import module06.skateparksAdmin_V2.skateparkadmin.skateparkeditor.model.SkateparkFormModel
@@ -39,32 +42,48 @@ fun ApplicationScope.SkateparkEditorWindow(state: SkateparkEditorState, trigger:
            state          = rememberWindowState(width    = 950.dp,
                                                 height   = 850.dp,
                                                 position = WindowPosition(Alignment.Center))) {
-        SkateparkEditorUi(state.formModel,  state.imageBitmap, trigger)
+        SkateparkEditorUi(skatepark = state.formModel,
+                          imageBitmap = state.imageBitmap,
+                          trigger = trigger,
+                          parkDefects = state.parkDefects,
+                          triggerDefect = { state.defectExplorerController.triggerAction(it) })
     }
 }
 
 @Composable
-fun SkateparkEditorUi(skatepark: SkateparkFormModel, imageBitmap: ImageBitmap, trigger: (SkateparkEditorAction) -> Unit ) {
+fun SkateparkEditorUi(skatepark: SkateparkFormModel,
+                     imageBitmap: ImageBitmap,
+                     trigger: (SkateparkEditorAction) -> Unit,
+                     parkDefects: List<Defect>,
+                     triggerDefect: (DefectExplorerAction) -> Unit) {
     EdeaTheme(darkTheme = false) {
         Column(modifier = Modifier.background(Color.White)
                                   .fillMaxSize()) {
             Bar(trigger)
 
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp),
-                   modifier            = Modifier.padding(20.dp)) {
-                Header(skatepark, imageBitmap)
-                Box(modifier = Modifier.weight(1.0f)) {
-                    val scrollState = rememberLazyListState()
-                    LazyColumn(state = scrollState) {
-                        item {
-                            Form(skatepark, trigger)
+            Box(modifier = Modifier.weight(1.0f).fillMaxWidth()) {
+                val scrollState = rememberLazyListState()
+                LazyColumn(state = scrollState,
+                           contentPadding = PaddingValues(20.dp),
+                           verticalArrangement = Arrangement.spacedBy(24.dp),
+                           modifier = Modifier.fillMaxSize().padding(end = 12.dp)) {
+                    item {
+                        Header(skatepark, imageBitmap)
+                    }
+                    item {
+                        Form(skatepark, trigger)
+                    }
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth().height(240.dp)) {
+                            DefectExplorerUi(parkDefects, triggerDefect)
                         }
                     }
-                    VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState),
-                                      modifier = Modifier.fillMaxHeight()
-                                          .align(Alignment.CenterEnd))
+                    item {
+                        SaveBar(skatepark, trigger)
+                    }
                 }
-                SaveBar(skatepark, trigger)
+                VerticalScrollbar(adapter = rememberScrollbarAdapter(scrollState),
+                                  modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd))
             }
         }
     }
@@ -110,8 +129,8 @@ private fun StatusSelection(skatepark: SkateparkFormModel, onValueChange: (Strin
 
 @Composable
 private fun Form(skatepark: SkateparkFormModel, trigger: (SkateparkEditorAction) -> Unit){
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp),
-           modifier = Modifier.fillMaxWidth().padding(end = 20.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp),
+           modifier = Modifier.fillMaxWidth()) {
         FormField(attribute = skatepark.name,
                   onValueChange = { trigger(SkateparkEditorAction.SetName(it)) })
         Text(skatepark.description.caption)

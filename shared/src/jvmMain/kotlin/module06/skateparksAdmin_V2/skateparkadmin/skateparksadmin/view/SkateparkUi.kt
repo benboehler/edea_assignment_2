@@ -37,6 +37,8 @@ private fun showEditorUi(controller: SkateparkEditorController) {
     SkateparkEditorUi(skatepark     = controller.state.formModel,
                       imageBitmap   = controller.state.imageBitmap,
                       trigger       = { controller.triggerAction(it) },
+                      parkDefects = controller.state.parkDefects,
+                      triggerDefect = { controller.state.defectExplorerController.triggerAction(it) },
                     )
 }
 
