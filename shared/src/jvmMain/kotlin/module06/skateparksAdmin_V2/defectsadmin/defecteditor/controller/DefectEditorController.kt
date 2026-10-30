@@ -26,8 +26,15 @@ class DefectEditorController(id: Int,
             return
         }
         when(action){
-
-            else -> {}
+            is DefectEditorAction.SetName -> {
+                val name = state.currentFormModel.name
+                val isValid = action.nameText.isNotBlank()
+                state.currentFormModel.name = name.copy(
+                    value = if (isValid) action.nameText else name.value,
+                    valueAsText = action.nameText,
+                    isValid = isValid
+                )
+            }
         }
     }
 

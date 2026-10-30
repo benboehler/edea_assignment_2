@@ -7,6 +7,8 @@ import module06.xtracted.repository.urlFromResources
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class DefectEditorControllerTest {
     private lateinit var repository: DefectRepository
@@ -38,4 +40,32 @@ class DefectEditorControllerTest {
         }
     }
 
+    @Test
+    fun testSetName(){
+        //given
+        val defect = repository.create(Defect(id = -1, name = "Broken ramp", parkId = 5))
+        val controller = DefectEditorController(defect.id, repository)
+        val newName = "Damaged bench"
+
+        //when
+        controller.triggerAction(DefectEditorAction.SetName(newName))
+
+        //then
+        with(controller.state.currentFormModel.name) {
+            assertEquals(newName, value)
+            assertEquals(newName, valueAsText)
+            assertTrue(isValid)
+        }
+
+        //when
+        controller.triggerAction(DefectEditorAction.SetName(""))
+
+        //then
+        with(controller.state.currentFormModel.name) {
+            assertEquals(newName, value)
+            assertEquals("", valueAsText)
+            assertFalse(isValid)
+        }
+        assertEquals(defect, repository.readDefect(defect.id))
+    }
 }

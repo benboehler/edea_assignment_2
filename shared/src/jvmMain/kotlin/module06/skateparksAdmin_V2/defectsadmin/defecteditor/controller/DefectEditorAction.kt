@@ -7,5 +7,5 @@ sealed class DefectEditorAction(override val name: String,
                                 override val icon: ImageVector? = null,
                                 override val enabled: Boolean = true) : Action {
 
-   //to be implemented
+    class SetName(val nameText: String) : DefectEditorAction("Set name")
 }
