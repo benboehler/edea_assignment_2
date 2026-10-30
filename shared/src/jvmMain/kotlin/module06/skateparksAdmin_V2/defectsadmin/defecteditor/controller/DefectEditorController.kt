@@ -42,6 +42,10 @@ class DefectEditorController(id: Int,
                 onSkateparkSelected(form.parkId.value)
             }
             DefectEditorAction.Back -> onFinished()
+            DefectEditorAction.Reload -> {
+                val defect = repository.readDefect(state.currentFormModel.id.value)!!
+                state = state.copy(currentFormModel = DefectFormModel(defect))
+            }
             DefectEditorAction.Update -> {
                 if (!state.currentFormModel.isValid) {
                     return

@@ -43,6 +43,29 @@ class DefectEditorControllerTest {
     }
 
     @Test
+    fun testReloadRestoresStoredDefect(){
+        //given
+        val defect = repository.create(Defect(id = -1, name = "Broken ramp", parkId = 5))
+        var finished = false
+        val controller = DefectEditorController(defect.id, repository,
+                                                onFinished = { finished = true })
+        controller.triggerAction(DefectEditorAction.SetName(""))
+        controller.triggerAction(DefectEditorAction.SetIssueDate("invalid"))
+        val updatedDefect = defect.copy(description = "Updated in database")
+        repository.updateDefect(updatedDefect)
+
+        //when
+        controller.triggerAction(DefectEditorAction.Reload)
+
+        //then
+        assertEquals(updatedDefect, controller.state.currentFormModel.asDefect())
+        assertEquals(updatedDefect.name, controller.state.currentFormModel.name.valueAsText)
+        assertTrue(controller.state.currentFormModel.isValid)
+        assertFalse(finished)
+        assertEquals(updatedDefect, repository.readDefect(defect.id))
+    }
+
+    @Test
     fun testSetName(){
         //given
         val defect = repository.create(Defect(id = -1, name = "Broken ramp", parkId = 5))

@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.RemoveCircle
+import androidx.compose.material.icons.filled.Sync
 import module06.xtracted.controller.Action
 import module06.skateparksAdmin_V2.defectsadmin.shared.DefectState
 
@@ -19,6 +20,7 @@ sealed class DefectEditorAction(override val name: String,
     class SetResolveDate(val resolveDateText: String) : DefectEditorAction("Set resolve date")
     object Update : DefectEditorAction("Save")
     object Back : DefectEditorAction("Back", Icons.AutoMirrored.Filled.ArrowBack)
+    object Reload : DefectEditorAction("Reload", Icons.Filled.Sync)
     object Delete : DefectEditorAction("Delete", Icons.Filled.RemoveCircle)
     object SaveBackToPark : DefectEditorAction("Save and return to park")
 }

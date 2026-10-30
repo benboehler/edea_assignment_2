@@ -81,7 +81,7 @@ fun DefectEditorUi(defect: DefectFormModel, trigger: (DefectEditorAction) -> Uni
 private fun TopBar(trigger: (DefectEditorAction) -> Unit) {
     Toolbar {
         AlignLeftRight {
-            ActionIconStrip(trigger, listOf(DefectEditorAction.Back))
+            ActionIconStrip(trigger, listOf(DefectEditorAction.Back, DefectEditorAction.Reload))
             ActionIcon(trigger = trigger, action = DefectEditorAction.Delete)
         }
     }
