@@ -19,9 +19,11 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.rememberWindowState
 import module06.skateparksAdmin_V2.defectsadmin.defectsadmin.controller.DefectController
+import module06.skateparksAdmin_V2.defectsadmin.defectsadmin.view.DefectUi
 import module06.skateparksAdmin_V2.fedAdmin.controller.FedAdminActions
 import module06.skateparksAdmin_V2.fedAdmin.controller.FedAdminState
 import module06.skateparksAdmin_V2.skateparkadmin.skateparksadmin.controller.SkateparkController
+import module06.skateparksAdmin_V2.skateparkadmin.skateparksadmin.view.SkateparkUi
 import module06.xtracted.view.theme.EdeaTheme
 
 @Composable
@@ -37,10 +39,10 @@ fun ApplicationScope.FedAdminWindow(state: FedAdminState, trigger: (FedAdminActi
 
 @Composable
 fun FedAdminUi(state: FedAdminState, trigger: (FedAdminActions) -> Unit) {
-    EdeaTheme {
+    EdeaTheme(darkTheme = false) {
         Scaffold(containerColor = MaterialTheme.colorScheme.surface,
                  topBar         = { FedTabs(state, trigger) }) {
-            Box(modifier = Modifier.padding(it)){
+            Box(modifier = Modifier.fillMaxSize().padding(it)){
                 when (state.activeController) {
                     is SkateparkController -> showSkateparkUi(state.activeController)
                     is DefectController    -> showDefectUi(state.activeController)
@@ -58,11 +60,11 @@ private fun FedTabs(state: FedAdminState, trigger: (FedAdminActions) -> Unit) {
         TabRow(modifier      = Modifier.fillMaxSize(),
             selectedTabIndex = getSelectedTabIndex(state)){
             Tab(selected = getSelectedTabIndex(state) == 0,
-                onClick = {  }){
+                onClick = { trigger(FedAdminActions.SwitchToSkateparks) }){
                 Text(text = "Skateparks")
             }
             Tab(selected  = getSelectedTabIndex(state) == 1,
-                onClick   = {  }){
+                onClick   = { trigger(FedAdminActions.SwitchToDefects) }){
                 Text(text = "Defects")
             }
         }
@@ -80,10 +82,10 @@ private fun getSelectedTabIndex(state: FedAdminState): Int =
 
 @Composable
 private fun showSkateparkUi(controller: SkateparkController) {
-    Text("add Skateparks Ui")
+    SkateparkUi(controller.state)
 }
 
 @Composable
 private fun showDefectUi(controller: DefectController) {
-    Text("add Defects Ui")
+    DefectUi(controller.state)
 }
