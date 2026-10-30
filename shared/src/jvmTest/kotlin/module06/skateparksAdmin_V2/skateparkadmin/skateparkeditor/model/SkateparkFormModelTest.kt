@@ -29,4 +29,15 @@ class SkateparkFormModelTest {
         assertEquals(skatepark, mappedSkatepark)
     }
 
+    @Test
+    fun testMappingZeroCoordinates(){
+        //given
+        val skatepark = Skatepark(name = "Zero coordinates", latitude = 0.0, longitude = 0.0)
+
+        //when
+        val mappedSkatepark = SkateparkFormModel(skatepark).asSkatepark()
+
+        //then
+        assertEquals(skatepark, mappedSkatepark)
+    }
 }

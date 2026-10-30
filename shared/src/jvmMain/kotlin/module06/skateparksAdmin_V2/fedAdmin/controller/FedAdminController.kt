@@ -47,7 +47,9 @@ class FedAdminController(private val skateparkRepository: SkateparkRepository,
             }
             is FedAdminActions.OpenSkatepark -> {
                 val controller = createSkateparkController()
-                controller.triggerAction(SkateparkAdminAction.SwitchToEditor(action.parkId))
+                if (skateparkRepository.readSkatepark(action.parkId) != null) {
+                    controller.triggerAction(SkateparkAdminAction.SwitchToEditor(action.parkId))
+                }
                 state = state.copy(activeController = controller)
             }
         }

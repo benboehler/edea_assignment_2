@@ -10,7 +10,7 @@ class SkateparkFormModel(skatepark: Skatepark){
     var description  by mutableStateOf(value = Attribute(caption ="Status",       value = skatepark.description,     valueAsText = skatepark.description.description))
 
     var id           by mutableStateOf(value = Attribute(caption ="Id",           value = skatepark.id,              valueAsText = skatepark.id.toString()))
-    var name         by mutableStateOf(value = Attribute(caption ="Name",         value = skatepark.name,            valueAsText = skatepark.name))
+    var name         by mutableStateOf(value = Attribute(caption ="Name",         value = skatepark.name,            valueAsText = skatepark.name, isValid = skatepark.name.isNotBlank()))
     var street       by mutableStateOf(value = Attribute(caption ="Street",       value = skatepark.street,          valueAsText = skatepark.street))
     var municipality by mutableStateOf(value = Attribute(caption ="Municipality", value = skatepark.municipality,    valueAsText = skatepark.municipality))
     var mapsUrl      by mutableStateOf(value = Attribute(caption ="MapsUrl",      value = skatepark.mapsUrl,         valueAsText = skatepark.mapsUrl))
@@ -31,8 +31,8 @@ class SkateparkFormModel(skatepark: Skatepark){
                   street.value,
                   municipality.value,
                   mapsUrl.value,
-                  if(latitude.value == 0.0) null else latitude.value,
-                  if(longitude.value == 0.0) null else longitude.value,
+                  if(latitude.valueAsText.isBlank()) null else latitude.value,
+                  if(longitude.valueAsText.isBlank()) null else longitude.value,
                   website.value,
                   imageUrl.value,
                   placeid.value)

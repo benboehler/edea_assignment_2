@@ -289,4 +289,21 @@ class SkateparkEditorControllerTest {
 
     }
 
+    @Test
+    fun testUpdateRejectsInitiallyEmptyName(){
+        //given
+        val skatepark = skateparkRepo.create(Skatepark(name = ""))
+        var onFinishedCounter = 0
+        val controller = SkateparkEditorController(skatepark.id, skateparkRepo,
+                                                   onFinished = { onFinishedCounter++ })
+
+        //when
+        controller.triggerAction(SkateparkEditorAction.Update)
+
+        //then
+        assertFalse(controller.state.formModel.name.isValid)
+        assertFalse(controller.state.formModel.isValid)
+        assertEquals(0, onFinishedCounter)
+        assertEquals(skatepark, skateparkRepo.readSkatepark(skatepark.id))
+    }
 }

@@ -224,4 +224,23 @@ class FedAdminControllerTest {
         val explorer = defectAdmin.state.activeController as DefectExplorerController
         assertEquals(defect.copy(name = "Repaired ramp"), explorer.state.allDefects.single())
     }
+    @Test
+    fun testSaveBackToMissingParkShowsSkateparkExplorer(){
+        //given
+        val defect = defectRepo.create(Defect(id = -1, name = "Broken ramp", parkId = 999999))
+        val controller = FedAdminController(skateparkRepo, defectRepo)
+        controller.triggerAction(FedAdminActions.OpenDefect(defect.id))
+        val defectAdmin = controller.state.activeController as DefectController
+        val defectEditor = defectAdmin.state.activeController as DefectEditorController
+        defectEditor.triggerAction(DefectEditorAction.SetName("Repaired ramp"))
+
+        //when
+        defectEditor.triggerAction(DefectEditorAction.SaveBackToPark)
+
+        //then
+        assertTrue(controller.state.activeController is SkateparkController)
+        val skateparkAdmin = controller.state.activeController as SkateparkController
+        assertTrue(skateparkAdmin.state.activeController is SkateparkExplorerController)
+        assertEquals(defect.copy(name = "Repaired ramp"), defectRepo.readDefect(defect.id))
+    }
 }
