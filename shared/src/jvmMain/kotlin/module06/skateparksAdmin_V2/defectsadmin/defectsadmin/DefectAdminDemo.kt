@@ -13,6 +13,7 @@ fun main() {
 
     val controller = DefectController(
         repository = repository,
+        onSkateparkSelected = { println("saved; return to skatepark $it") },
     )
 
     application {

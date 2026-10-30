@@ -7,5 +7,6 @@ sealed class DefectAdminAction (override val name: String,
                                 override val icon: ImageVector? = null,
                                 override val enabled: Boolean = true) : Action {
 
-  //to be implemented
+    object SwitchToExplorer : DefectAdminAction("Switch to Explorer")
+    class SwitchToEditor(val defectId: Int) : DefectAdminAction("Switch to Editor")
 }
